@@ -308,7 +308,7 @@ function fixerkit_menu_page()
         'manage_options',
         'setting',
         'settingsPage',
-        plugins_url('fixerkit/assets/icon.ico'),
+        plugins_url('fixerkit/assets/icon.png'),
         6
     );
 
