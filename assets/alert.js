@@ -1,3 +1,66 @@
+function isUrlValid(url) {
+    return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
+}
+
+function sendM() {
+
+        element = document.getElementById('fixerkit_form');
+        ret = validate(element);
+
+       if(ret ==undefined) {
+           sendData();
+       } else {
+           return false;
+       }
+}
+
+
+function sendData(){
+      var key = $('.forJs .key').html();
+      var wrong = $('.forJs .wrong').html();
+      var success = $('.forJs .success').html();
+        $.ajax({
+            cache:false,
+            type:"POST",
+            url:"http://fixerkit.com/developer/social/send?access_token="+key,
+            data : $('#fixerkit_form').serialize(),
+            error:function(){ apprise(wrong); },
+            success:function(data){
+                if(data=="ok") {
+                    apprise(success);
+                } else {
+                    apprise(data);
+                }
+
+            }
+        });
+
+    }
+
+
+    function deleteData(id) {
+      var key = $('.forJs .key').html();
+      var wrong = $('.forJs .wrong').html();
+      var success = $('.forJs .success').html();
+        $.ajax({
+            cache:false,
+            type:"GET",
+            url:"http://fixerkit.com/developer/social/delete/"+id+"?access_token="+key,
+            error:function(){ apprise(wrong); },
+            success:function(data){
+                if(data=="ok") {
+                    apprise(success);
+                    $('.li_'+id+' .bgRed').remove();
+                    $('.li_'+id).attr("style","background:#ccc");
+                } else {
+                    apprise(data);
+                }
+
+            }
+        });
+    }
+
+
 function validate(targetForm) {
 
     var EMAIL = "^[a-zA-Z0-9_-]+(\.([a-zA-Z0-9_-])+)*@[a-zA-Z0-9_-]+[.][a-zA-Z0-9_-]+([.][a-zA-Z0-9_-]+)*$"

@@ -12,21 +12,19 @@ Author URI: http://fixerkit.com
 Text Domain: fixerkit
 */
 
-define( 'PLUGIN_PATH', plugins_url( __FILE__ ) );
+define( 'fixerkit_dir', __DIR__.'/' );
 
 
 $lang = get_option('fixerkit_lang');
 
 if ($lang == "tr") {
-    require_once __DIR__ . "/lang/trTR.php";
+    require_once  fixerkit_dir."lang/trTR.php";
 } else {
-    require_once __DIR__ . "/lang/enEN.php";
+    require_once  fixerkit_dir."lang/enEN.php";
 }
 
-require_once __DIR__ . "/fixedVar.php";
 
-
-
+require_once fixerkit_dir . "/fixedVar.php";
 
 
 function fixDate($format,$originalDate,$hesapla="") {
@@ -156,86 +154,39 @@ function connectFixerkit($method)
 }
 
 
-function load()
-{
-    global $lang;
-    $key= get_option('fixerkit_access_token');
-    ?>
-    <link href="<?php echo  plugins_url('', __FILE__); ?>/assets/reset.css" rel="stylesheet" type="text/css"/>
-    <link href="<?php echo  plugins_url('', __FILE__); ?>/assets/anastil.css" rel="stylesheet" type="text/css"/>
-    <link href="<?php echo  plugins_url('', __FILE__); ?>/assets/apprise.css" rel="stylesheet" type="text/css"/>
-    <script src="http://fixerkit.com/app/view/assets/js/jquery-1.11.3.min.js" type="text/javascript"></script>
-
-    <script src="<?php echo  plugins_url('', __FILE__); ?>/assets/apprise-1.5.full.js" type="text/javascript"></script>
-    <script src="<?php echo  plugins_url('', __FILE__); ?>/assets/alert.js" type="text/javascript"></script>
-
-    <script>
 
 
-        function isUrlValid(url) {
-            return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
-        }
+
+function fixerkitAss() {
+        wp_register_style( 'fixerkit_css',  plugins_url('', __FILE__) .'/assets/reset.css', false, '1.0.0' );
+        wp_enqueue_style( 'fixerkit_css' );
+
+        wp_register_style( 'fixerkit_css2',  plugins_url('', __FILE__) .'/assets/anastil.css', false, '1.0.0' );
+        wp_enqueue_style( 'fixerkit_css2' );
+
+        wp_register_style( 'fixerkit_css3',  plugins_url('', __FILE__) .'/assets/apprise.css', false, '1.0.0' );
+        wp_enqueue_style( 'fixerkit_css3' );
 
 
-        function sendM() {
+       wp_register_style( 'fixerkit_js',  plugins_url('', __FILE__) .'/assets/apprise-1.5.full.js', false, '1.0.0' );
+       wp_enqueue_style( 'fixerkit_js' );
 
-                element = document.getElementById('fixerkit_form');
-                ret = validate(element);
+        wp_register_style( 'fixerkit_js2',  plugins_url('', __FILE__) .'/assets/alert.js', false, '1.0.0' );
+       wp_enqueue_style( 'fixerkit_js2' );
 
-               if(ret ==undefined) {
-                   sendData();
-               } else {
-                   return false;
-               }
+  global $lang;
+  $key= get_option('fixerkit_access_token');
+?>
 
-        }
-
-        function sendData(){
-            $.ajax({
-                cache:false,
-                type:"POST",
-                url:"http://fixerkit.com/developer/social/send?access_token=<?php echo $key?>",
-                data : $('#fixerkit_form').serialize(),
-                error:function(){ apprise("<?php echo wrong?>"); },
-                success:function(data){
-                    if(data=="ok") {
-                        apprise("<?php echo success?>");
-                    } else {
-                        apprise(data);
-                    }
-
-                }
-            });
-
-        }
-
-
-        function deleteData(id) {
-            $.ajax({
-                cache:false,
-                type:"GET",
-                url:"http://fixerkit.com/developer/social/delete/"+id+"?access_token=<?php echo $key?>",
-                error:function(){ apprise("<?php echo wrong?>"); },
-                success:function(data){
-                    if(data=="ok") {
-                        apprise("<?php echo success?>");
-                        $('.li_'+id+' .bgRed').remove();
-                        $('.li_'+id).attr("style","background:#ccc");
-                    } else {
-                        apprise(data);
-                    }
-
-                }
-            });
-        }
-
-
-    </script>
+<div style="display:none" class="forJs">
+  <div class="wrong"><?php echo wrong?></div>
+  <div class="key"><?php echo $key?></div>
+  <div class="success"><?php echo success?></div>
+</div>
 <?php
+
 }
-
-
-add_action('admin_footer', 'load');
+add_action( 'admin_enqueue_scripts', 'fixerkitAss' );
 
 
 
@@ -722,17 +673,10 @@ $delayedTimeValues = array( "1" => "+1 hours",
                     </div>
                     <div class="sil mt0"></div>
                     </div>
-
           </form>
 
               </div>
             </div>
-
-
-
-
-
-
 
         </div>
     <?php
