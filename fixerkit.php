@@ -387,6 +387,9 @@ if (is_admin()) {
                 <h1 class="h2"><?php echo  settings?></h1>
                 <div class="mt20"></div>
 
+
+              Erişim Anahtarı için <a href="http://fixerkit.com">fixerkit.com</a>'a <a href="http://fixerkit.com/register">üye olunuz</a>
+              <br> <br> <br>
                 <form method="post" action="options.php">
                     <?php
                     settings_fields("section");
@@ -418,6 +421,7 @@ if (is_admin()) {
                 <div class="sil"></div>
 
             </div>
+
         </div>
     <?php
     }
@@ -445,6 +449,10 @@ if (is_admin()) {
                 <div class="mt20"></div>
                 <h1 class="h2"><?php echo  socialNetworks?></h1>
                 <div class="mt20"></div>
+
+
+              Sosyal hesap ekleyebilmek için fixerkit.com panelindeki <a href="http://fixerkit.com/panel/socialNetworks">Sosyal Ağlar</a> alanından sosyal medya hesabınızı ekleyin
+        <br> <br> <br>
                 <?php
                 $networks = unserialize($getAccounts->socialNetworks);
             if(is_object($getAccounts->account)) {
@@ -552,7 +560,7 @@ $delayedTimeValues = array( "1" => "+1 hours",
 
         $getMyGroups = connectFixerkit("getGroups");
         ?>
-       <div class="content bgWhite">
+       <div class="bgWhite padding10">
             <div class="header">
                 <div class="sol mr20">
                     <img src="<?php echo  plugins_url('', __FILE__); ?>/assets/logo.png"/>

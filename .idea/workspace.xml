@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="72b5c943-22c0-4282-bfb8-f2c555e8154e" name="Default" comment="icon &amp; Old Version bug&#10;">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/alert.js" afterPath="$PROJECT_DIR$/assets/alert.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fixerkit.php" afterPath="$PROJECT_DIR$/fixerkit.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="fixerkit.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,7 +38,7 @@
       <file leaf-file-name="fixerkit.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fixerkit.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="674" column="26" selection-start="22295" selection-end="22295" vertical-scroll-proportion="0.8016336" vertical-offset="10084" max-vertical-offset="11798">
+            <state line="391" column="28" selection-start="11657" selection-end="11657" vertical-scroll-proportion="0.63528717" vertical-offset="5574" max-vertical-offset="11934">
               <folding />
             </state>
           </provider>
@@ -272,7 +271,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fixerkit.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="674" column="26" selection-start="22295" selection-end="22295" vertical-scroll-proportion="0.8016336" vertical-offset="10084" max-vertical-offset="11798">
+        <state line="391" column="28" selection-start="11657" selection-end="11657" vertical-scroll-proportion="0.63528717" vertical-offset="5574" max-vertical-offset="11934">
           <folding />
         </state>
       </provider>
