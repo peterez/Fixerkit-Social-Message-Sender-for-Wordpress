@@ -12,7 +12,72 @@ Author URI: http://fixerkit.com
 Text Domain: fixerkit
 */
 
-define( 'fixerkit_dir', __DIR__.'/' );
+
+
+
+
+/**
+ * Register a custom menu page.
+ */
+ 
+ 
+
+ 
+function fixerkit_menu_page()
+{
+    add_menu_page(
+        __('Fixerkit', 'textdomain'),
+        'Fixerkit '.settings,
+        'manage_options',
+        'setting',
+        'settingsPage',
+        plugin_dir_url( __FILE__ ) .'assets/icon.png',
+        6
+    );
+
+    add_submenu_page(
+        'setting',
+        listSocialMessage,
+        listSocialMessage,
+        'manage_options',
+        'history',
+        'historyPage');
+
+    add_submenu_page(
+        'setting',
+        socialNetworks,
+        socialNetworks,
+        'manage_options',
+        'account',
+        'getAccountsPage');
+
+    add_submenu_page(
+        'setting',
+        sendSocialMessage,
+        sendSocialMessage,
+        'manage_options',
+        'send',
+        'sendPage');
+}
+
+
+add_action('admin_menu', 'fixerkit_menu_page');
+
+
+
+
+/**
+ * pages options
+ */
+
+if (is_admin()) {
+	
+	
+	
+	 define( 'fixerkit_dir', __DIR__.'/' );
+	 define( 'fixerkit_plugin_dir', plugin_dir_url( __FILE__ ) );
+	
+
 
 
 $lang = get_option('fixerkit_lang');
@@ -245,60 +310,7 @@ function filter_handler( $data , $postarr ) {
 
 add_filter( 'wp_insert_post_data', 'filter_handler', '99', 2 );
 
-
-
-
-/**
- * Register a custom menu page.
- */
-function fixerkit_menu_page()
-{
-    add_menu_page(
-        __('Fixerkit', 'textdomain'),
-        'Fixerkit '.settings,
-        'manage_options',
-        'setting',
-        'settingsPage',
-        plugins_url('fixerkit/assets/icon.png'),
-        6
-    );
-
-    add_submenu_page(
-        'setting',
-        listSocialMessage,
-        listSocialMessage,
-        'manage_options',
-        'history',
-        'historyPage');
-
-    add_submenu_page(
-        'setting',
-        socialNetworks,
-        socialNetworks,
-        'manage_options',
-        'account',
-        'getAccountsPage');
-
-    add_submenu_page(
-        'setting',
-        sendSocialMessage,
-        sendSocialMessage,
-        'manage_options',
-        'send',
-        'sendPage');
-}
-
-
-add_action('admin_menu', 'fixerkit_menu_page');
-
-
-
-
-/**
- * pages options
- */
-
-if (is_admin()) {
+	
 
 
     function fixerkit_access_token()
@@ -693,4 +705,3 @@ $delayedTimeValues = array( "1" => "+1 hours",
 }
 
 ?>
-
