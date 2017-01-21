@@ -4,7 +4,7 @@
  */
 /*
 Plugin Name: Fixerkit
-Plugin URI: http://fixerkit.com
+Plugin URI: https://github.com/peterez/Fixerkit-Social-Message-Sender-for-Wordpress
 Description: Fixerkit Social Share Plugin
 Version: 1.0
 Author: Fixerkit
@@ -30,7 +30,7 @@ function fixerkit_menu_page()
         'Fixerkit '.settings,
         'manage_options',
         'setting',
-        'settingsPage',
+        'fixerkit_settingsPage',
         plugin_dir_url( __FILE__ ) .'assets/icon.png',
         6
     );
@@ -41,7 +41,7 @@ function fixerkit_menu_page()
         listSocialMessage,
         'manage_options',
         'history',
-        'historyPage');
+        'fixerkit_historyPage');
 
     add_submenu_page(
         'setting',
@@ -49,7 +49,7 @@ function fixerkit_menu_page()
         socialNetworks,
         'manage_options',
         'account',
-        'getAccountsPage');
+        'fixerkit_getAccountsPage');
 
     add_submenu_page(
         'setting',
@@ -57,7 +57,7 @@ function fixerkit_menu_page()
         sendSocialMessage,
         'manage_options',
         'send',
-        'sendPage');
+        'fixerkit_sendPage');
 }
 
 
@@ -80,9 +80,9 @@ if (is_admin()) {
 
 
 
-$lang = get_option('fixerkit_lang');
+$fixerkit_lang = get_option('fixerkit_lang');
 
-if ($lang == "tr") {
+if ($fixerkit_lang == "tr") {
     require_once  fixerkit_dir."lang/trTR.php";
 } else {
     require_once  fixerkit_dir."lang/enEN.php";
@@ -92,59 +92,15 @@ if ($lang == "tr") {
 require_once fixerkit_dir . "/fixedVar.php";
 
 
-function fixDate($format,$originalDate,$hesapla="") {
+function fixerkit_fixDate($format,$originalDate,$hesapla="") {
   if($hesapla !="") { return date($format,strtotime($hesapla,strtotime($originalDate))); }
   else              { return date($format,strtotime($originalDate)); }
 }
 
 
-function dateFormat($originalDate,$format=array(0=>'0',1=>'$day $textMonth $year $textDay Saat : $hour')) {
-  $day = date("d", strtotime($originalDate));
-  $hour = date("H", strtotime($originalDate));
-  $second = date("i", strtotime($originalDate));
-  $year = date("Y", strtotime($originalDate));
-  $month = date("m", strtotime($originalDate));
-
-  if($month == "01") { $textMonth = january; $shortMonthText = jan;  }
-  if($month == "02") { $textMonth = february; $shortMonthText = feb;  }
-  if($month == "03") { $textMonth = march;  $shortMonthText = mar; }
-  if($month == "04") { $textMonth = april; $shortMonthText = apr; }
-  if($month == "05") { $textMonth = may;  $shortMonthText = mayShort; }
-  if($month == "06") { $textMonth = june;  $shortMonthText = jun; }
-  if($month == "07") { $textMonth = july;  $shortMonthText = jul; }
-  if($month == "08") { $textMonth = august; $shortMonthText = aug; }
-  if($month == "09") { $textMonth = september;  $shortMonthText = sep; }
-  if($month == "10") { $textMonth = october;  $shortMonthText = oct; }
-  if($month == "11") { $textMonth = novamber;  $shortMonthText = nov; }
-  if($month == "12") { $textMonth = december;  $shortMonthText = dec; }
-
-  $gunumuz = date("l", strtotime($originalDate));
-
-  if($gunumuz == "Monday") { $textDay = monday; $shortDayText = mon;  }
-  if($gunumuz == "Tuesday") { $textDay = tuesday; $shortDayText = tue;  }
-  if($gunumuz == "Wednesday") { $textDay = wednesday; $shortDayText = wed;  }
-  if($gunumuz == "Thursday") { $textDay = thursday; $shortDayText = thu; }
-  if($gunumuz == "Friday") { $textDay = friday; $shortDayText = fri; }
-  if($gunumuz == "Saturday") { $textDay = saturday; $shortDayText = sat;  }
-  if($gunumuz == "Sunday") { $textDay = sunday; $shortDayText = sun;  }
 
 
-    if(count($format)>1) {
-      $tarihimiz = $day." ".$textMonth." ".$year."  ".$textDay." "." Saat"." : ".$hour.":".$second;
-    }   else if($format =="format1") {
-      $tarihimiz = $day." ".$textMonth." ".$year;
-    } else {
-      $tarihimiz = str_replace(
-        array('$shortMonthText','$shortDayText','$textDay','$day','$year','$month','$textMonth','$hour','$second'),
-        array($shortMonthText,$shortDayText,$textDay,$day,$year,$month,$textMonth,$hour,$second)
-        ,$format);
-    }
-
-  return $tarihimiz;
-}
-
-
-function fixerkit_custom_meta_box_markup()
+function fixerkit_current_group_html()
 {
 
     $currentGroupId = get_option('fixerkit_groups');
@@ -171,12 +127,12 @@ function fixerkit_custom_meta_box_markup()
 <?php
 }
 
-function fixerkit_add_custom_meta_box()
+function fixerkit_add_current_group_html()
 {
-    add_meta_box("fixerkit-meta-box", myGroups, "fixerkit_custom_meta_box_markup", "post", "side", "high", null);
+    add_meta_box("fixerkit-meta-box", myGroups, "fixerkit_current_group_html", "post", "side", "high", null);
 }
 
-add_action("add_meta_boxes", "fixerkit_add_custom_meta_box");
+add_action("add_meta_boxes", "fixerkit_add_current_group_html");
 
 
 
@@ -207,12 +163,12 @@ function  fixerkitMenu()
 function connectFixerkit($method)
 {
     $key = get_option('fixerkit_access_token');
-    global $lang;
-    if ($lang == "") {
-        $lang = "en";
+    global $fixerkit_lang;
+    if ($fixerkit_lang == "") {
+        $fixerkit_lang = "en";
     }
     if (trim($key) != "") {
-        return json_decode(file_get_contents("http://" . $lang . ".fixerkit.com/developer/social/" . $method . "?access_token=" . $key));
+        return json_decode(file_get_contents("http://" . $fixerkit_lang . ".fixerkit.com/developer/social/" . $method . "?access_token=" . $key));
     } else {
         return false;
     }
@@ -239,7 +195,7 @@ function fixerkitAss() {
         wp_register_style( 'fixerkit_js2',  plugins_url('', __FILE__) .'/assets/alert.js', false, '1.0.0' );
        wp_enqueue_style( 'fixerkit_js2' );
 
-  global $lang;
+  global $fixerkit_lang;
   $key= get_option('fixerkit_access_token');
 ?>
 
@@ -255,7 +211,7 @@ add_action( 'admin_enqueue_scripts', 'fixerkitAss' );
 
 
 
-function filter_handler( $data , $postarr ) {
+function fixerkit_filter_handler( $data , $postarr ) {
 
     global $lastMess;
 
@@ -308,7 +264,7 @@ function filter_handler( $data , $postarr ) {
 
 }
 
-add_filter( 'wp_insert_post_data', 'filter_handler', '99', 2 );
+add_filter( 'wp_insert_post_data', 'fixerkit_filter_handler', '99', 2 );
 
 	
 
@@ -344,19 +300,19 @@ add_filter( 'wp_insert_post_data', 'filter_handler', '99', 2 );
 
     function fixerkit_lang()
     {
-        global $langs;
-        $lang = get_option('fixerkit_lang');
+        global $fixerkit_langs;
+        $fixerkit_lang = get_option('fixerkit_lang');
         ?>
         <select name="fixerkit_lang" id="fixerkit_lang" class="defaultIS">
-            <?php foreach ($langs as $key => $value) { ?>
-                <option value="<?php echo  $key ?>" <?php echo  $lang == $key ? "selected" : "" ?>><?php echo  $value ?></option>
+            <?php foreach ($fixerkit_langs as $key => $value) { ?>
+                <option value="<?php echo  $key ?>" <?php echo  $fixerkit_lang == $key ? "selected" : "" ?>><?php echo  $value ?></option>
             <?php } ?>
         </select>
     <?php
     }
 
 
-    function display_theme_panel_fields()
+    function fixerkit__panel_fields2html()
     {
         add_settings_section("section", "", null, "fixerkit-options");
 
@@ -370,17 +326,22 @@ add_filter( 'wp_insert_post_data', 'filter_handler', '99', 2 );
 
     }
 
-    add_action("admin_init", "display_theme_panel_fields");
+    add_action("admin_init", "fixerkit__panel_fields2html");
 
 
     /**
      * pages functions
      */
 
-    function settingsPage()
+    function fixerkit_settingsPage()
     {
         $myLimit = connectFixerkit("myLimit");
 
+        if($myLimit->social_share =="" and $myLimit->social_limit =="" and $myLimit->project_limit =="" and  $myLimit->keyword_limit =="" and get_option('fixerkit_access_token') !="" ) {
+            ?>
+            <script>alert('Yanlış Erişim Anahtarı');</script>
+            <?
+        }
 
         ?>
       <div class="bgWhite padding10" >
@@ -411,7 +372,7 @@ add_filter( 'wp_insert_post_data', 'filter_handler', '99', 2 );
                 </form>
 
               <div class="mt20"></div>
-                         <h1 class="h2"><?php echo  myLimits?></h1>
+             <h1 class="h2"><?php echo  myLimits?></h1>
 
                 <div class="mt20"></div>
                 <div class="sol">
@@ -439,7 +400,7 @@ add_filter( 'wp_insert_post_data', 'filter_handler', '99', 2 );
     }
 
 
-    function getAccountsPage()
+    function fixerkit_getAccountsPage()
     {
 
         $getAccounts = connectFixerkit("getAccounts");
@@ -491,7 +452,7 @@ add_filter( 'wp_insert_post_data', 'filter_handler', '99', 2 );
     }
 
 
-    function historyPage()
+    function fixerkit_historyPage()
     {
         $listMessages = connectFixerkit("listMessages");
         ?>
@@ -514,23 +475,24 @@ add_filter( 'wp_insert_post_data', 'filter_handler', '99', 2 );
                 <?php
                 $status = unserialize($listMessages->status);
                 $statused = unserialize($listMessages->statused);
+                if(is_object($listMessages->message)) {
                 foreach ($listMessages->message as $item) {
                     ?>
                     <div class="listItem li_<?php echo  $item->id ?>">
                         <div class="sol width400"><?php echo  $item->title ?></div>
-                        <div class="sol ml30"><?php echo  dateFormat($item->send_date) ?></div>
+                        <div class="sol ml30"><?php echo  ($item->send_date) ?></div>
                         <div class="sag mr10"><?php echo  $statused[$item->status] ?></div>
 
                         <div class="sil"></div>
                     </div>
-                <?php } ?>
+                <?php }} ?>
             </div>
         </div>
     <?php
     }
 
 
-    function sendPage()
+    function fixerkit_sendPage()
     {
 
 
@@ -651,10 +613,10 @@ $delayedTimeValues = array( "1" => "+1 hours",
                        <?} ?>
                        <?if(strstr($textTime,"on")) {
                          $replace = str_replace("on ","",$textTime);
-                         $currentTime =  fixDate("Y-m-d H:i:s",date("Y-m-d")." ".$replace.":00:00");
+                         $currentTime =  fixerkit_fixDate("Y-m-d H:i:s",date("Y-m-d")." ".$replace.":00:00");
                          if($currentTime>date("Y-m-d H:i:s")) {
                          ?>
-                        <option value="<?=$key?>"><?=$times?> ( <?=dateFormat($currentTime)?> )</option>
+                        <option value="<?=$key?>"><?=$times?> ( <?=($currentTime)?> )</option>
                         <?} } ?>
                      <?} ?>
                        </select>
