@@ -4,7 +4,7 @@
  */
 /*
 Plugin Name: Fixerkit
-Plugin URI: http://fixerkit.com
+Plugin URI: https://github.com/peterez/Fixerkit-Social-Message-Sender-for-Wordpress
 Description: Fixerkit Social Share Plugin
 Version: 1.0
 Author: Fixerkit
@@ -42,6 +42,7 @@ if (is_admin()) {
       $lang="en";
     }
 
+<<<<<<< HEAD
     $key   =get_option('fixerkit_access_token');
     $link  ="http://" . $lang . ".fixerkit.com/developer/social/" . $method . "?access_token=" . $key;
     $sesKey="fixerkit_ses_" . $method;
@@ -51,6 +52,51 @@ if (is_admin()) {
     } else {
       fixerkit_flushCookie();
     }
+=======
+/**
+ * Register a custom menu page.
+ */
+ 
+ 
+
+ 
+function fixerkit_menu_page()
+{
+    add_menu_page(
+        __('Fixerkit', 'textdomain'),
+        'Fixerkit '.settings,
+        'manage_options',
+        'setting',
+        'fixerkit_settingsPage',
+        plugin_dir_url( __FILE__ ) .'assets/icon.png',
+        6
+    );
+
+    add_submenu_page(
+        'setting',
+        listSocialMessage,
+        listSocialMessage,
+        'manage_options',
+        'history',
+        'fixerkit_historyPage');
+
+    add_submenu_page(
+        'setting',
+        socialNetworks,
+        socialNetworks,
+        'manage_options',
+        'account',
+        'fixerkit_getAccountsPage');
+
+    add_submenu_page(
+        'setting',
+        sendSocialMessage,
+        sendSocialMessage,
+        'manage_options',
+        'send',
+        'fixerkit_sendPage');
+}
+>>>>>>> origin/master
 
     if ($ses!="") {
       return json_decode(base64_decode($ses));
@@ -82,6 +128,7 @@ if (is_admin()) {
 
   function fixerkit_custom_meta_box_markup() {
 
+<<<<<<< HEAD
     $currentGroupId=get_option('fixerkit_groups');
     $getMyGroups   =connectFixerkit("getGroups");
     $currentGroupId=$_GET['action']=="edit"?"-":$currentGroupId;
@@ -106,6 +153,15 @@ if (is_admin()) {
     </select>
   <?php
   }
+=======
+$fixerkit_lang = get_option('fixerkit_lang');
+
+if ($fixerkit_lang == "tr") {
+    require_once  fixerkit_dir."lang/trTR.php";
+} else {
+    require_once  fixerkit_dir."lang/enEN.php";
+}
+>>>>>>> origin/master
 
   function fixerkit_add_custom_meta_box() {
     add_meta_box("fixerkit-meta-box", myGroups, "fixerkit_custom_meta_box_markup", "post", "side", "high", null);
@@ -135,12 +191,20 @@ if (is_admin()) {
     wp_register_style('fixerkit_css', plugins_url('', __FILE__) . '/assets/reset.css', false, '1.0.0');
     wp_enqueue_style('fixerkit_css');
 
+<<<<<<< HEAD
     wp_register_style('fixerkit_css2', plugins_url('', __FILE__) . '/assets/anastil.css', false, '1.0.0');
     wp_enqueue_style('fixerkit_css2');
+=======
+function fixerkit_fixDate($format,$originalDate,$hesapla="") {
+  if($hesapla !="") { return date($format,strtotime($hesapla,strtotime($originalDate))); }
+  else              { return date($format,strtotime($originalDate)); }
+}
+>>>>>>> origin/master
 
     wp_register_style('fixerkit_css3', plugins_url('', __FILE__) . '/assets/apprise.css', false, '1.0.0');
     wp_enqueue_style('fixerkit_css3');
 
+<<<<<<< HEAD
     wp_register_style('fixerkit_js', plugins_url('', __FILE__) . '/assets/apprise-1.5.full.js', false, '1.0.0');
     wp_enqueue_style('fixerkit_js');
 
@@ -184,11 +248,14 @@ if (is_admin()) {
       $img=wp_get_attachment_image_src($postarr['_thumbnail_id'], 'full');
 
       $perma=get_permalink($postarr['ID']);
+=======
+>>>>>>> origin/master
 
       if ($perma!="") {
         $postarr['guid']=$perma;
       }
 
+<<<<<<< HEAD
       $post=array(
          'title'      =>$postarr['post_title'],
          'image'      =>$img[0],
@@ -197,6 +264,10 @@ if (is_admin()) {
          'group_id'   =>$postarr['selected_fixerkit_group'],
          'api_uniq'   =>$postarr['ID']
       );
+=======
+function fixerkit_current_group_html()
+{
+>>>>>>> origin/master
 
       $isSended = get_post_meta($postarr['ID'], "fixerkit_sended_id",true);
 
@@ -251,6 +322,7 @@ if (is_admin()) {
   <?php
   }
 
+<<<<<<< HEAD
   function fixerkit_lang() {
     global $langs;
     $lang=get_option('fixerkit_lang');
@@ -265,6 +337,14 @@ if (is_admin()) {
 
   function display_theme_panel_fields() {
     add_settings_section("section", "", null, "fixerkit-options");
+=======
+function fixerkit_add_current_group_html()
+{
+    add_meta_box("fixerkit-meta-box", myGroups, "fixerkit_current_group_html", "post", "side", "high", null);
+}
+
+add_action("add_meta_boxes", "fixerkit_add_current_group_html");
+>>>>>>> origin/master
 
     add_settings_field("fixerkit_access_token", accessToken, "fixerkit_access_token", "fixerkit-options", "section");
     add_settings_field("fixerkit_groups", myGroups, "fixerkit_groups", "fixerkit-options", "section");
@@ -289,7 +369,23 @@ if (is_admin()) {
 
         <?php fixerkitMenu() ?>
 
+<<<<<<< HEAD
         <div class="sil"></div>
+=======
+function connectFixerkit($method)
+{
+    $key = get_option('fixerkit_access_token');
+    global $fixerkit_lang;
+    if ($fixerkit_lang == "") {
+        $fixerkit_lang = "en";
+    }
+    if (trim($key) != "") {
+        return json_decode(file_get_contents("http://" . $fixerkit_lang . ".fixerkit.com/developer/social/" . $method . "?access_token=" . $key));
+    } else {
+        return false;
+    }
+}
+>>>>>>> origin/master
 
       </div>
       <div class="padding10 tabContent">
@@ -353,7 +449,13 @@ if (is_admin()) {
           <img src="<?php echo plugins_url('', __FILE__); ?>/assets/logo.png"/>
         </div>
 
+<<<<<<< HEAD
         <?php fixerkitMenu() ?>
+=======
+  global $fixerkit_lang;
+  $key= get_option('fixerkit_access_token');
+?>
+>>>>>>> origin/master
 
         <div class="sil"></div>
 
@@ -362,8 +464,12 @@ if (is_admin()) {
 
       <div class="padding10 tabContent">
 
+<<<<<<< HEAD
         <div class="mt20"></div>
         <h1 class="h2"><?php echo socialNetworks ?></h1>
+=======
+function fixerkit_filter_handler( $data , $postarr ) {
+>>>>>>> origin/master
 
         <div class="mt20"></div>
 
@@ -422,6 +528,10 @@ if (is_admin()) {
 
         </table>
 
+<<<<<<< HEAD
+=======
+add_filter( 'wp_insert_post_data', 'fixerkit_filter_handler', '99', 2 );
+>>>>>>> origin/master
 
       </div>
 
@@ -431,15 +541,36 @@ if (is_admin()) {
         <a href="http://fixerkit.com/login" target="_blank"
            class="linkButton butonBlue"><?= addNew ?></a>
 
+<<<<<<< HEAD
       </div>
+=======
+    function fixerkit_lang()
+    {
+        global $fixerkit_langs;
+        $fixerkit_lang = get_option('fixerkit_lang');
+        ?>
+        <select name="fixerkit_lang" id="fixerkit_lang" class="defaultIS">
+            <?php foreach ($fixerkit_langs as $key => $value) { ?>
+                <option value="<?php echo  $key ?>" <?php echo  $fixerkit_lang == $key ? "selected" : "" ?>><?php echo  $value ?></option>
+            <?php } ?>
+        </select>
+    <?php
+    }
+>>>>>>> origin/master
 
     </div>
   <?php
   }
 
+<<<<<<< HEAD
   function historyPage() {
     $listMessages=connectFixerkit("listMessages");
     ?>
+=======
+    function fixerkit__panel_fields2html()
+    {
+        add_settings_section("section", "", null, "fixerkit-options");
+>>>>>>> origin/master
 
     <div class="bgWhite padding10">
       <div class="header">
@@ -451,14 +582,19 @@ if (is_admin()) {
 
         <div class="sil"></div>
 
+<<<<<<< HEAD
       </div>
       <div class="padding10 tabContent">
         <div class="mt20"></div>
         <h1 class="h2"><?php echo listSocialMessage ?></h1>
+=======
+    add_action("admin_init", "fixerkit__panel_fields2html");
+>>>>>>> origin/master
 
         <div class="mt20"></div>
 
 
+<<<<<<< HEAD
         <table class="wp-list-table widefat fixed striped posts">
           <thead>
           <tr>
@@ -473,6 +609,17 @@ if (is_admin()) {
           </thead>
 
           <tbody id="the-list">
+=======
+    function fixerkit_settingsPage()
+    {
+        $myLimit = connectFixerkit("myLimit");
+
+        if($myLimit->social_share =="" and $myLimit->social_limit =="" and $myLimit->project_limit =="" and  $myLimit->keyword_limit =="" and get_option('fixerkit_access_token') !="" ) {
+            ?>
+            <script>alert('Yanlış Erişim Anahtarı');</script>
+            <?
+        }
+>>>>>>> origin/master
 
           <?php
           $status=unserialize($listMessages->status);
@@ -494,9 +641,33 @@ if (is_admin()) {
                     <span class="edit"><a href="/post.php?post=<?= $item->api_uniq ?>&action=edit">Yazıyı Düzenle</a> | </span>
                   <? } ?>
 
+<<<<<<< HEAD
                   <? if ($item->link!="") { ?>
                     <span class="view"><a href="<?= $item->link ?>" target="_blank">Görüntüle</a></span>
                   <? } ?>
+=======
+              Erişim Anahtarı için <a href="http://fixerkit.com">fixerkit.com</a>'a <a href="http://fixerkit.com/register">üye olunuz</a>
+              <br> <br> <br>
+                <form method="post" action="options.php">
+                    <?php
+                    settings_fields("section");
+                    do_settings_sections("fixerkit-options");
+                    submit_button();
+                    ?>
+                </form>
+
+              <div class="mt20"></div>
+             <h1 class="h2"><?php echo  myLimits?></h1>
+
+                <div class="mt20"></div>
+                <div class="sol">
+                <div class="sol width150"><?php echo  socialShare?></div>
+                <div class="sol width150"> : <?php echo  $myLimit->social_share ?></div>
+                <div class="sil mt10"></div>
+                <div class="sol width150"><?php echo  socialLimit?></div>
+                <div class="sol width150"> : <?php echo  $myLimit->social_limit ?></div>
+                <div class="sil mt10"></div>
+>>>>>>> origin/master
                 </div>
                 <button type="button" class="toggle-row"><span class="screen-reader-text">Daha fazla detay göster</span>
                 </button>
@@ -512,7 +683,12 @@ if (is_admin()) {
             </tr>
           <?php } ?>
 
+<<<<<<< HEAD
           </tbody>
+=======
+    function fixerkit_getAccountsPage()
+    {
+>>>>>>> origin/master
 
         </table>
 
@@ -603,10 +779,17 @@ if (is_admin()) {
 
             <div class="mt10 hideElementOnMobile"></div>
 
+<<<<<<< HEAD
             <div class="socialLink">
               <div class="sol per-width15 textRight colTitle"><?= link ?> :</div>
               <div class="sol per-width85 colTitle ">
                 <input name="link" placeholder="http://fixerkit.com" class="defaultIS per-width70 linkVal"/>
+=======
+    function fixerkit_historyPage()
+    {
+        $listMessages = connectFixerkit("listMessages");
+        ?>
+>>>>>>> origin/master
 
               </div>
               <div class="sil mt0"></div>
@@ -624,6 +807,7 @@ if (is_admin()) {
               </div>
               <div class="sil"></div>
             </div>
+<<<<<<< HEAD
 
             <div class="mt10 hideElementOnMobile"></div>
 
@@ -654,10 +838,80 @@ if (is_admin()) {
                 </select>
               </div>
               <div class="sil mt0"></div>
+=======
+            <div class="padding10 tabContent">
+                <div class="mt20"></div>
+                <h1 class="h2"><?php echo  listSocialMessage?></h1>
+                <div class="mt20"></div>
+                <?php
+                $status = unserialize($listMessages->status);
+                $statused = unserialize($listMessages->statused);
+                if(is_object($listMessages->message)) {
+                foreach ($listMessages->message as $item) {
+                    ?>
+                    <div class="listItem li_<?php echo  $item->id ?>">
+                        <div class="sol width400"><?php echo  $item->title ?></div>
+                        <div class="sol ml30"><?php echo  ($item->send_date) ?></div>
+                        <div class="sag mr10"><?php echo  $statused[$item->status] ?></div>
+
+                        <div class="sil"></div>
+                    </div>
+                <?php }} ?>
+>>>>>>> origin/master
             </div>
 
             <div class="mt10 hideElementOnMobile"></div>
 
+<<<<<<< HEAD
+=======
+    function fixerkit_sendPage()
+    {
+
+
+$delayedTimes = array( "1" => _1hoursLater,
+                   "2" => _3hoursLater,
+                   "3" => _6hoursLater,
+                   "4" => _10hoursLater,
+                   "5" => _12hoursLater,
+                   "6" => _18hoursLater,
+                   "7" => _1dayLater,
+                   "8" => _2dayLater,
+                   "9" => _on6,
+                   "10" => _on9,
+                   "11" => _on12,
+                   "12" => _on15,
+                   "13" => _on18,
+                   "14" => _on21,
+                   "15" => _on24
+);
+
+
+$delayedTimeValues = array( "1" => "+1 hours",
+                   "2" => "+3 hours",
+                   "3" => "+6 hours",
+                   "4" => "+10 hours",
+                   "5" => "+12 hours",
+                   "6" => "+18 hours",
+                   "7" => "+1 days",
+                   "8" => "+2 days",
+                   "9" => "on 06",
+                   "10" => "on 09",
+                   "11" => "on 12",
+                   "12" => "on 15",
+                   "13" => "on 18",
+                   "14" => "on 21",
+                   "15" => "on 24"
+);
+
+
+        $getMyGroups = connectFixerkit("getGroups");
+        ?>
+       <div class="bgWhite padding10">
+            <div class="header">
+                <div class="sol mr20">
+                    <img src="<?php echo  plugins_url('', __FILE__); ?>/assets/logo.png"/>
+                </div>
+>>>>>>> origin/master
 
             <div class="socialTitle">
               <div class="sol per-width15 textRight  colTitle"><?= title ?> :</div>
@@ -681,11 +935,124 @@ if (is_admin()) {
 
             <div class="mt10 hideElementOnMobile"></div>
 
+<<<<<<< HEAD
             <div class="inline-block">
               <div class="sol per-width15 textRight colTitle">&nbsp; </div>
               <div class="sol per-width85 colTitle">
                 <input type="button" name="sendSocialMessage" onclick="sendM()" class="butonBlue pointer inputButton"
                        value=" <?= send ?> ">
+=======
+            <div class=" padding10" >
+
+              <div class="mt20"></div>
+                  <h1 class="h2"><?php echo  sendSocialMessage?></h1>
+                  <div class="mt20"></div>
+
+              <div class="padding10">
+                  <form id="fixerkit_form" onsubmit="return validate(this);">
+
+
+           <div class="inline-block  ew50">
+           <div class="sol per-width25 textRight colTitle"><?=group?> : </div>
+           <div class="sol per-width75 colTitle">
+             <select name="group_id" class="defaultIS">
+               <option value="0"><?php echo  all?></option>
+                                 <?php if (is_object($getMyGroups)) {
+                                     foreach ($getMyGroups as $item) { ?>
+                                         <option value="<?php echo  $item->id ?>"><?php echo  $item->title ?></option>
+                                     <?php }
+                                 } ?>
+                   </select>
+           </div>
+           <div class="sil mt0"></div>
+           </div>
+
+           <div class="mt10 hideElementOnMobile"></div>
+
+                    <div class="inline-block socialLink ew50">
+                    <div class="sol per-width25 textRight colTitle"><?=link?> : </div>
+                    <div class="sol per-width75 colTitle ">
+                      <input   name="link" class="defaultIS per-width70 linkVal"/>
+                      <div class="sil"></div>
+                        <small class="smallText">http://fixerkit.com</small>
+                    </div>
+                    <div class="sil mt0"></div>
+
+
+                    </div>
+
+                    <div class="mt10 hideElementOnMobile"></div>
+
+
+                    <div class="inline-block socialImg ew50">
+                       <div class="sol per-width25 textRight colTitle "><?=imageLink?> : </div>
+                       <div class="sol per-width75 colTitle">
+                         <input name="image" class="defaultIS  imgVal"/>
+                       </div>
+                       <div class="sil"></div>
+                       </div>
+
+                       <div class="mt10 hideElementOnMobile"></div>
+
+
+                    <div class="inline-block  ew50">
+                    <div class="sol per-width25 textRight colTitle"><?=timing?> : </div>
+                    <div class="sol per-width75 colTitle">
+                      <select name="delayed" class="defaultIS">
+                         <option value="0"><?=choose?></option>
+                     <? foreach($delayedTimes as $key => $times) {
+                       $textTime = $delayedTimeValues[$key];
+                       ?>
+                        <?if(strstr($textTime,"+")) {?>
+                       <option value="<?=$key?>"><?=$times?></option>
+                       <?} ?>
+                       <?if(strstr($textTime,"on")) {
+                         $replace = str_replace("on ","",$textTime);
+                         $currentTime =  fixerkit_fixDate("Y-m-d H:i:s",date("Y-m-d")." ".$replace.":00:00");
+                         if($currentTime>date("Y-m-d H:i:s")) {
+                         ?>
+                        <option value="<?=$key?>"><?=$times?> ( <?=($currentTime)?> )</option>
+                        <?} } ?>
+                     <?} ?>
+                       </select>
+                    </div>
+                    <div class="sil mt0"></div>
+                    </div>
+
+                    <div class="mt10 hideElementOnMobile"></div>
+
+
+                    <div class="inline-block socialTitle ew50">
+                    <div class="sol per-width25 textRight  colTitle"><?=title?> : </div>
+                    <div class="sol per-width75 colTitle">
+                      <input  name="title" class="defaultIS "/>
+                    </div>
+                    <div class="sil mt0"></div>
+                    </div>
+
+                    <div class="mt10 hideElementOnMobile"></div>
+
+                    <div class="inline-block socialDescription ew50">
+                     <div class="sol per-width25 textRight colTitle"><?=description?> : </div>
+
+                     <div class="sol ew75 colTitle">
+                       <textarea name="description" uyari="1" message="<?php echo  emptyInput?>" class="ew100 height130" ></textarea>
+                     </div>
+                     <div class="sil mt0"></div>
+                     </div>
+
+                     <div class="mt10 hideElementOnMobile"></div>
+
+                    <div class="inline-block  ew50">
+                    <div class="sol per-width25 textRight colTitle">&nbsp; </div>
+                    <div class="sol per-width75 colTitle">
+                      <input type="button" name="sendSocialMessage" onclick="sendM()" class="butonBlue pointer inputButton" value=" <?=send?> ">
+                    </div>
+                    <div class="sil mt0"></div>
+                    </div>
+          </form>
+
+>>>>>>> origin/master
               </div>
               <div class="sil mt0"></div>
             </div>
