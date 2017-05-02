@@ -380,8 +380,9 @@ float: right;
     font-size: 14px;
 }
 
-.menu .colored li a {
-  color:#fff;
+.menu .colored  {
+     background:#3d566d;
+    color:#fff;
 }
 
 .menu li:hover a {
